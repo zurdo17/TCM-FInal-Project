@@ -19,9 +19,8 @@ def Introduction():
 def School_selection():
     print("Please type below the school you are interested in")
     school_question = input()
-    if school_question == df_updated['College']
-        print (df_updated[df_updated.Question==school_question])
-    break
+    if school_question == df_updated['College']:
+        print(df_updated[df_updated.Question==school_question])
 
 Introduction()
 School_selection()
