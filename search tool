@@ -1,26 +1,32 @@
 import time
 import csv
 import pandas as pd
+import random
+
 
 csv_file = "question_data.csv"
-df = pd.read_csv(csv_file, na_values="None")
-df_updated = df.to_csv(csv_file, header=["College", "Question"], index=False)
+df = pd.read_csv(csv_file, names=["College", "Question"])
+modified_df = df.dropna()
+df_question = modified_df.groupby("College")["Question"]
 
 
-def Introduction():
+def Grouping():
     print(
-        """Hello...
-    I see that you are preparing for your Med School Interviews.
-    What specific School of Medicine are you interested?"""
+        """These are the Schools of Medicine we cover
+and the amount of questions available for each..."""
     )
-    time.sleep(4)
+    time.sleep(3)
+    print(df_question.count())
 
 
-def School_selection():
-    print("Please type below the school you are interested in")
-    school_question = input()
-    if school_question == df_updated['College']:
-        print(df_updated[df_updated.Question==school_question])
+def Schools():
+    print("How many questions would you like?")
+    number = int(input())
+    for College, frame in df_question:
+        print(f"Here are the questions for {College!r}")
+        print(frame.sample(n=number, random_state=2))
 
-Introduction()
-School_selection()
+
+Grouping()
+time.sleep(5)
+Schools()
