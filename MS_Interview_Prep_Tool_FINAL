@@ -1,0 +1,96 @@
+import time
+import random
+import csv
+import pandas as pd
+
+
+csv_file = "question_data.csv"
+#Defines dataframe with pandas
+df = pd.read_csv(csv_file, names=["College", "Question"])
+modified_df = df.dropna()
+
+#This code filters the entries from the question_data.csv. It only prints entries that contain '?', 'Explian', 'Define', and 'Tell me'.
+#As the question_data.csv file contains data that are not questions, this line filters them out.
+modified_df = modified_df[modified_df['Question'].str.contains('\?|Explain|Define|Tell me')]
+df_question = modified_df.groupby("College")["Question"]
+
+#The startup function greets the user and gives instructions on how to use the Medical School Interview Preparation Tool
+def Startup():
+    print()
+    print("Welcome to the Medical School Interview Preparation Tool")
+    print()
+    time.sleep(3)
+    print("You will now be presented with a list of all medical schools in the SDN database.")
+    print()
+    time.sleep(4)
+    print("After selecting a medical school, copy and paste the name the name of the school into the command line.")
+    print()
+    time.sleep(4)
+    #Asks user if they would like to continue. If they input "no", they will exit the program.
+    x = input("Would you like to proceed with the school selection process? (yes/no): ")
+    if x == "yes":
+        return None
+    if x == "no":
+        exitProgram()
+        quit()
+
+#This function presents the user with all the medical schools in the SDN database. It reads from the school_names.csv file
+def searchSchool():
+    with open("school_names.csv") as f:
+        reader = csv.reader(f)
+        for row in reader:
+            print(row[0])
+            time.sleep(0.01)
+    print()
+
+
+#This function generates a random question from the medical school the user selected.
+def generateRandomQuestion(df, college):
+    return random.choice(df[df['College'] == college]['Question'].values)
+
+#This function brings closure to the usage of the application.
+def exitProgram():
+    print()
+    print()
+    time.sleep(0.5)
+    print("Thank you for using the Medical School Interview Preparation Tool")
+    time.sleep(0.5)
+
+##################### MAIN PROGRAM #####################
+
+#program starts
+Startup()
+time.sleep(1)
+
+#This while loop that encases a great deal of the program allows the user to switch medical schools.
+search_new_school = "yes"
+while search_new_school == "yes":
+
+    searchSchool()
+
+    #Receives medical school student wished to prepare for
+    school_selection = input('Please enter a medical school from the list above: ')
+
+    # The while loop below allows the user to continue generating more random questions from the medical school they selected.
+    continue_prep = "yes"
+    while continue_prep == "yes":
+        print()
+        time.sleep(1)
+        print(f"Generating random interview question from {school_selection!r}")
+        print()
+        time.sleep(1)
+        print("...")
+        time.sleep(1)
+        print()
+        #generates random question accordign to school selection and filters placed in line 14.
+        random_question = generateRandomQuestion(modified_df, school_selection)
+        print(random_question)
+        print()
+        time.sleep(1.5)
+        continue_prep = input("Would you like another question? (yes/no): ")
+
+    print()
+    #Gives user the option of switching medical schools.
+    search_new_school = input("Would you like to search questions from another school? (yes/no): ")
+
+exitProgram()
