@@ -5,11 +5,11 @@ import pandas as pd
 
 
 csv_file = "question_data.csv"
-#Defines dataframe with pandas
+#Defines dataframe using pandas and places columns for each subset
 df = pd.read_csv(csv_file, names=["College", "Question"])
 modified_df = df.dropna()
 
-#This code filters the entries from the question_data.csv. It only prints entries that contain '?', 'Explian', 'Define', and 'Tell me'.
+#This code filters the entries from the question_data.csv. It only prints entries that contain '?', 'Explain', 'Define', and 'Tell me'.
 #As the question_data.csv file contains data that are not questions, this line filters them out.
 modified_df = modified_df[modified_df['Question'].str.contains('\?|Explain|Define|Tell me')]
 df_question = modified_df.groupby("College")["Question"]
